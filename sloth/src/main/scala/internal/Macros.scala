@@ -47,6 +47,7 @@ class Translator[C <: Context](val c: C) {
     if member.isAbstract
     if member.isMethod
     if member.isPublic
+    if member.isAbstract
     if !member.isConstructor
     if !member.isSynthetic
     symbol = member.asMethod
