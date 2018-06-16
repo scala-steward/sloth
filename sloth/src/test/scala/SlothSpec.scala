@@ -106,7 +106,7 @@ class SlothSpec extends AsyncFreeSpec with MustMatchers {
           }
       }
 
-      val client = Client[PickleType, Future](Transport)
+      val client = Client[PickleType, Future, Throwable](Transport)
       val api = client.wire[Api[Future]]
       val emptyApi = client.wire[EmptyApi]
     }
@@ -165,7 +165,7 @@ class SlothSpec extends AsyncFreeSpec with MustMatchers {
           Backend.router(request).toEither.fold(err => Future.failed(new Exception(err.toString)), _(10).result)
       }
 
-      val client = Client[PickleType, Future](Transport)
+      val client = Client[PickleType, Future, Throwable](Transport)
       val api = client.wire[Api[Future]]
     }
 
@@ -194,7 +194,7 @@ class SlothSpec extends AsyncFreeSpec with MustMatchers {
           }
       }
 
-      val client = Client[PickleType, Observable](Transport)
+      val client = Client[PickleType, Observable, Throwable](Transport)
       val api = client.wire[MixedApi]
     }
 
@@ -229,7 +229,7 @@ class SlothSpec extends AsyncFreeSpec with MustMatchers {
           }
       }
 
-      val client = Client[PickleType, Observable](Transport)
+      val client = Client[PickleType, Observable, Throwable](Transport)
       val api = client.wire[MultiTypeArgApi[Future, Observable]]
     }
 
