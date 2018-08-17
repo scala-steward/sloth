@@ -162,7 +162,7 @@ trait Api {
 }
 ```
 
-A `Router` and a `RequestTransport` need one concrete higher-kinded type to work on. Here, you need to decide for a type that can hold both, a future and an observable. You can do this by defining an implicit conversion `ResultMapping`:
+A `Router` and a `RequestTransport` need one concrete higher-kinded type to work on. Here, you need to decide for a type that can hold both, a Future and an Observable. You can then do this by defining an implicit conversion `ResultMapping` to e.g. Observable:
 ```scala
 implicit val futureToObservable: ResultMapping[Future, Observable] = new ResultMapping[Future, Observable] {
     def apply[T](result: Future[T]): Observable[T] = Observable.fromFuture(result)
@@ -178,10 +178,9 @@ Then you can define your `Router[PickleType, Observable]` and `Client[PickleType
 
 For logging, you can define a `LogHandler`, which can log each request including the deserialized request and response. Define it when creating the `Client`:
 ```scala
-object MyLogHandler extends LogHandler {
-  def logRequest[Result[_], ErrorType](path: List[String], argumentObject: Product, result: Result[_])(implicit monad: MonadError[Result, _ >: ErrorType]): Unit = ()
+object MyLogHandler extends LogHandler[ClientResult[_]] {
+  def logRequest[T](path: List[String], argumentObject: Product, result: ClientResult[T]): ClientResult[T] = ???
 }
-
 val client = Client[PickleType, ClientResult](Transport, MyLogHandler)
 ```
 
